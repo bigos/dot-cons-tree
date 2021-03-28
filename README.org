@@ -41,7 +41,10 @@
     #+end_src
 
     If there was no error and your SBCL lisp returned
+
     #+begin_example
+    dot options (-Tsvg /tmp/dot-graph.gv -o /tmp/dot-graph.svg)
     #<SB-IMPL::PROCESS :EXITED 0>
     #+end_example
-    your graph will be found in the file indicated by the dot options.
+
+    your graph location will be indicated by the last of the dot options.
