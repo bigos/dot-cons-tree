@@ -4,6 +4,7 @@
 ;;; loading and reloading
 ;; (push #p"~/Programming/Lisp/dot-cons-tree/" asdf:*central-registry*)
 ;; (ql:quickload :dot-cons-tree)
+;; (in-package #:dot-cons-tree)
 ;; (dot-cons-tree:draw-graph '(1 (2.1 . 2.2) 3))
 
 (in-package #:dot-cons-tree)
@@ -16,8 +17,12 @@
                    acc
                    (flatten (cdr x) acc)))))
 
-(defstruct person (name) (surname))
-(defparameter *person* (make-person :name (cons "Mister" "Paul") :surname "Graham"))
+(defstruct person (name) (surname) (some-titles))
+(defparameter *person* (make-person :name (cons "Mister" "Paul")
+                                    :surname "Graham"
+                                    :some-titles (list "author" "programmer" "thinker")))
+;; show structure elements
+;; (dot-cons-tree:draw-graph (list 1 '(2.1 . 2.2) *person*))
 
 (defun instance-slots (i)
   (mapcar #'sb-mop:slot-definition-name
@@ -109,10 +114,9 @@
           (format g "~S ~A~%" (nth 0 a) (attributes-to_string (nth 1 a))))
         (format g "~%")
         (loop for c in connections do
-          (format g "~A ~A /* ~s */~%"
+          (format g "~A ~A~%"
                   (nth 1 c)
-                  (attributes-to_string (nth 2 c))
-                  (format nil "~A" (nth 0 c))))
+                  (attributes-to_string (nth 2 c))))
         (format g "}~%")))))
 
 (defun draw-graph (x)
