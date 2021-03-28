@@ -1,4 +1,9 @@
 ;;;; dot-cons-tree.lisp
+(declaim (optimize (speed 0) (debug 3)))
+
+;; (push #p"~/Programming/Lisp/dot-cons-tree/" asdf:*central-registry*)
+;; (ql:quickload :dot-cons-tree)
+;; (dot-cons-tree:draw-graph '(1 (2.1 . 2.2) 3))
 
 (in-package #:dot-cons-tree)
 

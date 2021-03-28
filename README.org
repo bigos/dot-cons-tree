@@ -31,7 +31,7 @@
 
 *** REPL use
 
-    If you project is not in your home folder, you need to alter the string in
+    If the project is not in your home folder, you need to alter the string in
     the first command.
 
     #+begin_src lisp
