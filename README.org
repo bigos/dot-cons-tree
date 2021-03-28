@@ -9,3 +9,13 @@
 ** Licence
 
    Public domain
+
+** REPL use
+
+   Assuming the project is in your home folder you can run the following in your
+   REPL.
+
+   #+begin_src lisp
+     (push #p"~/dot-cons-tree/" asdf:*central-registry*)
+     (ql:quickload :dot-cons-tree)
+   #+end_src

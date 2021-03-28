@@ -1,9 +1,9 @@
 ;;;; dot-cons-tree.asd
 
 (asdf:defsystem #:dot-cons-tree
-  :description "Describe dot-cons-tree here"
-  :author "Your Name <your.name@example.com>"
-  :license  "Specify license here"
+  :description "This is a cons tree visualiser that uses graphviz."
+  :author "Jacek Podkanski <ruby.object@googlemail.com>"
+  :license  "Public domain"
   :version "0.0.1"
   :serial t
   :components ((:file "package")
