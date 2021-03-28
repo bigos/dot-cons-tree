@@ -1,0 +1,11 @@
+* dot-cons-tree
+
+  This is a cons tree visualiser that uses graphviz.
+
+** Author
+
+   Jacek Podkanski
+
+** Licence
+
+   Public domain
