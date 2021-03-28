@@ -5,6 +5,7 @@
   :author "Jacek Podkanski <ruby.object@googlemail.com>"
   :license  "Public domain"
   :version "0.0.1"
+  :depends-on (#:serapeum)
   :serial t
   :components ((:file "package")
                (:file "dot-cons-tree")))

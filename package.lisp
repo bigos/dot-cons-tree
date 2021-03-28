@@ -1,4 +1,6 @@
 ;;;; package.lisp
 
 (defpackage #:dot-cons-tree
-  (:use #:cl))
+  (:use #:cl)
+  (:export #:draw-graph)
+  (:local-nicknames (#:se #:serapeum)))

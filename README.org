@@ -10,12 +10,32 @@
 
    Public domain
 
-** REPL use
+** Usage
 
-   Assuming the project is in your home folder you can run the following in your
-   REPL.
+*** Dependencies
 
-   #+begin_src lisp
-     (push #p"~/dot-cons-tree/" asdf:*central-registry*)
-     (ql:quickload :dot-cons-tree)
-   #+end_src
+**** graphviz
+
+     Please make sure graphviz is installed and the dot command works.
+
+     #+begin_example
+       dot --help
+     #+end_example
+
+**** serapeum
+
+     This project automatically downloads serapeum from quicklisp.
+
+     If you do not have quicklisp you can find the instructions here:
+     https://www.quicklisp.org/beta/
+
+*** REPL use
+
+    If you project is not in your home folder, you need to alter the string in
+    the first command.
+
+    #+begin_src lisp
+      (push #p"~/dot-cons-tree/" asdf:*central-registry*)
+      (ql:quickload :dot-cons-tree)
+      (dot-cons-tree:draw-graph '(1 (2.1 . 2.2) 3))
+    #+end_src
