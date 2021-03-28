@@ -39,3 +39,9 @@
       (ql:quickload :dot-cons-tree)
       (dot-cons-tree:draw-graph '(1 (2.1 . 2.2) 3))
     #+end_src
+
+    If there was no error and your SBCL lisp returned
+    #+begin_example
+    #<SB-IMPL::PROCESS :EXITED 0>
+    #+end_example
+    your graph will be found in the file indicated by the dot options.
