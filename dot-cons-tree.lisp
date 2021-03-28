@@ -50,9 +50,7 @@
                         (push (coll a sx osx) results)))))))
 
       (dive x '(r) '(no-parent)))
-    (progn
-      (format t "~A~%" results)
-      (reverse results))))
+    (reverse results)))
 
 (defun symbol-downcase (x)
   (string-downcase (format nil "~A" x)))
@@ -105,7 +103,7 @@
                                                ((equalp colsym 'd) "")
                                                (T (format nil "~A" colsym))))))))
                         (cdr results))))
-      (list 'aaa atom-shapes 'ccccc connections)
+
       (with-output-to-string (g)
         (format g "digraph {~%")
         (loop for a in atom-shapes do
