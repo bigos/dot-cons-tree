@@ -17,7 +17,7 @@
                    (flatten (cdr x) acc)))))
 
 (defstruct person (name) (surname))
-(defparameter *person* (make-person :name (cons "Sir" "Paul") :surname "Graham"))
+(defparameter *person* (make-person :name (cons "Mister" "Paul") :surname "Graham"))
 
 (defun instance-slots (i)
   (mapcar #'sb-mop:slot-definition-name
@@ -60,7 +60,10 @@
   (with-output-to-string (s)
     (format s "[~A]"
             (se:string-join
-             (loop for ap in x collect (format nil "~a=~s" (car ap) (cdr ap)))
+             (loop for ap in x
+                   when ap
+                     collect
+                     (format nil "~a=~s" (car ap) (cdr ap)))
              ", "))))
 
 (defun prepare-graph (x)
@@ -84,7 +87,12 @@
                                        (let ((colsym (nth 1 (nth 1 a))))
                                          (cond ((equalp colsym 'a) "red")
                                                ((equalp colsym 'd) "blue")
-                                               (T "green")))))))
+                                               (T "green"))))
+                                 (cons "label"
+                                       (let ((colsym (nth 1 (nth 1 a))))
+                                         (cond ((equalp colsym 'a) "")
+                                               ((equalp colsym 'd) "")
+                                               (T (break "zzzzzz ~A" a) (format nil "~S" colsym))))))))
                         (cdr results))))
       (list 'aaa atom-shapes 'ccccc connections)
       (with-output-to-string (g)
