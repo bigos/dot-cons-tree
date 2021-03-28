@@ -71,15 +71,23 @@
     (let ((atom-shapes (mapcar
                         (lambda (a)
                           (list (symbols-to-string (nth 1 a))
-                                (list (cons "shape" (if (null (car a)) "diamond" "box"))
-                                      (cons "label" (format nil "~S" (nth 0 a))))))
+
+                                (if (instance-slots (car a))
+                                    (list (cons "shape" "box")
+                                          (cons "color" "yellow")
+                                          (cons "style" "filled")
+                                          (cons "label" (format nil "~S"  (type-of (nth 0 a)))))
+                                    (list (cons "shape" (if (null (car a)) "diamond" "box"))
+                                          (cons "label" (format nil "~S" (nth 0 a))))
+
+                                    )))
                         (remove-if-not (lambda (x)
                                          (atom (car x)))
                                        results)))
           (connections (mapcar
                         (lambda (a)
                           (list (nth 0 a)
-                                (format nil "~S -> ~S"
+                                (format nil "~A -> ~A"
                                         (symbols-to-string (nth 2 a))
                                         (symbols-to-string (nth 1 a)))
                                 (list
