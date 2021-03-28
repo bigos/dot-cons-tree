@@ -40,7 +40,7 @@
                    (push (coll a sx osx) results)
                    (loop for sl in isl do
                      (dive (slot-value a sl)
-                           (cons (format nil "_~A_" sl) sx)
+                           (cons (format nil "~A" sl) sx)
                            sx)))
                  (cond ((consp a)
                         (push (coll a sx osx) results)
@@ -83,16 +83,14 @@
                                           (cons "style" "filled")
                                           (cons "label" (format nil "~S"  (type-of (nth 0 a)))))
                                     (list (cons "shape" (if (null (car a)) "diamond" "box"))
-                                          (cons "label" (format nil "~S" (nth 0 a))))
-
-                                    )))
+                                          (cons "label" (format nil "~S" (nth 0 a)))))))
                         (remove-if-not (lambda (x)
                                          (atom (car x)))
                                        results)))
           (connections (mapcar
                         (lambda (a)
                           (list (nth 0 a)
-                                (format nil "~A -> ~A"
+                                (format nil "~S -> ~S"
                                         (symbols-to-string (nth 2 a))
                                         (symbols-to-string (nth 1 a)))
                                 (list
@@ -105,7 +103,7 @@
                                        (let ((colsym (nth 1 (nth 1 a))))
                                          (cond ((equalp colsym 'a) "")
                                                ((equalp colsym 'd) "")
-                                               (T (format nil "~S" colsym))))))))
+                                               (T (format nil "~A" colsym))))))))
                         (cdr results))))
       (list 'aaa atom-shapes 'ccccc connections)
       (with-output-to-string (g)
