@@ -35,7 +35,7 @@
                    (push (coll a sx osx) results)
                    (loop for sl in isl do
                      (dive (slot-value a sl)
-                           (cons (format nil "-~A-" sl) sx)
+                           (cons (format nil "_~A_" sl) sx)
                            sx)))
                  (cond ((consp a)
                         (push (coll a sx osx) results)
@@ -92,7 +92,7 @@
                                        (let ((colsym (nth 1 (nth 1 a))))
                                          (cond ((equalp colsym 'a) "")
                                                ((equalp colsym 'd) "")
-                                               (T (break "zzzzzz ~A" a) (format nil "~S" colsym))))))))
+                                               (T (format nil "~S" colsym))))))))
                         (cdr results))))
       (list 'aaa atom-shapes 'ccccc connections)
       (with-output-to-string (g)
