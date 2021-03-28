@@ -1,6 +1,7 @@
 ;;;; dot-cons-tree.lisp
 (declaim (optimize (speed 0) (debug 3)))
 
+;;; loading and reloading
 ;; (push #p"~/Programming/Lisp/dot-cons-tree/" asdf:*central-registry*)
 ;; (ql:quickload :dot-cons-tree)
 ;; (dot-cons-tree:draw-graph '(1 (2.1 . 2.2) 3))
@@ -15,20 +16,38 @@
                    acc
                    (flatten (cdr x) acc)))))
 
+(defstruct person (name) (surname))
+(defparameter *person* (make-person :name (cons "Sir" "Paul") :surname "Graham"))
+
+(defun instance-slots (i)
+  (mapcar #'sb-mop:slot-definition-name
+          (sb-mop:class-slots (class-of i))))
+
 (defun analyse (x)
   (let ((results))
     (labels
         ((coll (dat sx osx)
            (list dat  (cons 'c  sx) (cons 'c osx)))
          (dive (a sx osx)
-           (if (consp a)
-               (progn
-                 (push (coll a sx osx) results)
-                 (dive (car a) (cons 'a sx) sx)
-                 (dive (cdr a) (cons 'd sx) sx))
-               (push (coll a sx osx) results))))
+           (let ((isl (instance-slots  a)))
+             (if isl
+                 (progn
+                   (push (coll a sx osx) results)
+                   (loop for sl in isl do
+                     (dive (slot-value a sl)
+                           (cons (format nil "-~A-" sl) sx)
+                           sx)))
+                 (cond ((consp a)
+                        (push (coll a sx osx) results)
+                        (dive (car a) (cons 'a sx) sx)
+                        (dive (cdr a) (cons 'd sx) sx))
+                       (t
+                        (push (coll a sx osx) results)))))))
+
       (dive x '(r) '(no-parent)))
-    (reverse results)))
+    (progn
+      (format t "~A~%" results)
+      (reverse results))))
 
 (defun symbol-downcase (x)
   (string-downcase (format nil "~A" x)))
@@ -57,7 +76,7 @@
           (connections (mapcar
                         (lambda (a)
                           (list (nth 0 a)
-                                (format nil "~A -> ~A"
+                                (format nil "~S -> ~S"
                                         (symbols-to-string (nth 2 a))
                                         (symbols-to-string (nth 1 a)))
                                 (list
@@ -71,7 +90,7 @@
       (with-output-to-string (g)
         (format g "digraph {~%")
         (loop for a in atom-shapes do
-          (format g "~A ~A~%" (nth 0 a) (attributes-to_string (nth 1 a))))
+          (format g "~S ~A~%" (nth 0 a) (attributes-to_string (nth 1 a))))
         (format g "~%")
         (loop for c in connections do
           (format g "~A ~A /* ~s */~%"
