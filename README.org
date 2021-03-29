@@ -13,6 +13,14 @@
 ** Usage
 
 *** Dependencies
+    At the moment the program is not portable. It uses the following SBCL
+    specific code.
+    #+begin_example
+      (mapcar #'sb-mop:slot-definition-name
+      (sb-mop:class-slots (class-of i))))
+      (sb-ext:run-program "/usr/bin/dot" options)))))
+    #+end_example
+
 
 **** graphviz
 
