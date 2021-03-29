@@ -80,7 +80,11 @@
                                           (cons "color" "yellow")
                                           (cons "style" "filled")
                                           (cons "label" (format nil "~S"  (type-of (nth 0 a)))))
-                                    (list (cons "shape" (if (null (car a)) "diamond" "box"))
+                                    (list (cons "shape" (cond ((null (car a))
+                                                               (if (equalp '(c a) (subseq  (nth 1 a) 0 2))
+                                                                   "octagon"
+                                                                   "diamond"))
+                                                              (T "box")))
                                           (cons "label" (format nil "~S" (nth 0 a)))))))
                         (remove-if-not (lambda (x)
                                          (atom (car x)))
