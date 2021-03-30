@@ -72,16 +72,15 @@
 (defun prepare-attributes (a)
   (list (symbols-to-string (nth 1 a))
         (cond ((instance-slots (car a))
-               (list (cons "shape" "box")
+               (list (cons "shape" "house")
                      (cons "color" "yellow")
                      (cons "style" "filled")
                      (cons "label" (format nil "~S"  (type-of (nth 0 a))))))
               ((null (car a))
-               (list
-                (cons "shape" (if (equalp '(c a) (subseq (nth 1 a) 0 2))
-                                  "octagon"
-                                  "diamond"))
-                (cons "label" (format nil "~S" (nth 0 a)))))
+               (list (cons "shape" (if (equalp '(c a) (subseq (nth 1 a) 0 2))
+                                       "octagon"
+                                       "diamond"))
+                     (cons "label" (format nil "~S" (nth 0 a)))))
               (T
                (list (cons "shape" "box")
                      (cons "label" (format nil "~S" (nth 0 a))))))))
