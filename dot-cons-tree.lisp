@@ -59,7 +59,7 @@
   (reduce (lambda (a x) (concatenate 'string a (symbol-downcase x)))
           x :initial-value ""))
 
-(defun attributes-to_string (x)
+(defun attributes-to-string (x)
   (with-output-to-string (s)
     (format s "[~A]"
             (se:string-join
@@ -85,41 +85,42 @@
                (list (cons "shape" "box")
                      (cons "label" (format nil "~S" (nth 0 a))))))))
 
+(defun prepare-connection-attributes (a)
+  (list (nth 0 a)
+        (format nil "~S -> ~S"
+                (symbols-to-string (nth 2 a))
+                (symbols-to-string (nth 1 a)))
+        (list
+         (cons "color"
+               (let ((colsym (nth 1 (nth 1 a))))
+                 (cond ((equalp colsym 'a) "red")
+                       ((equalp colsym 'd) "blue")
+                       (T "green"))))
+         (cons "label"
+               (let ((colsym (nth 1 (nth 1 a))))
+                 (cond ((equalp colsym 'a) "")
+                       ((equalp colsym 'd) "")
+                       (T (format nil "~A" colsym))))))))
+
 (defun prepare-graph (x)
   (let ((results (analyse x)))
-    (let ((atom-shapes (mapcar
-                        #'prepare-attributes
-                        (remove-if-not (lambda (x)
-                                         (atom (car x)))
-                                       results)))
-          (connections (mapcar
-                        (lambda (a)
-                          (list (nth 0 a)
-                                (format nil "~S -> ~S"
-                                        (symbols-to-string (nth 2 a))
-                                        (symbols-to-string (nth 1 a)))
-                                (list
-                                 (cons "color"
-                                       (let ((colsym (nth 1 (nth 1 a))))
-                                         (cond ((equalp colsym 'a) "red")
-                                               ((equalp colsym 'd) "blue")
-                                               (T "green"))))
-                                 (cons "label"
-                                       (let ((colsym (nth 1 (nth 1 a))))
-                                         (cond ((equalp colsym 'a) "")
-                                               ((equalp colsym 'd) "")
-                                               (T (format nil "~A" colsym))))))))
-                        (cdr results))))
-
+    (let ((nodes (mapcar #'prepare-attributes
+                         (remove-if-not (lambda (x)
+                                          (atom (car x)))
+                                        results)))
+          (connections (mapcar #'prepare-connection-attributes
+                               (cdr results))))
       (with-output-to-string (g)
         (format g "digraph {~%")
-        (loop for a in atom-shapes do
-          (format g "~S ~A~%" (nth 0 a) (attributes-to_string (nth 1 a))))
+        (loop for a in nodes do
+          (format g "~S ~A~%"
+                  (nth 0 a)
+                  (attributes-to-string (nth 1 a))))
         (format g "~%")
         (loop for c in connections do
           (format g "~A ~A~%"
                   (nth 1 c)
-                  (attributes-to_string (nth 2 c))))
+                  (attributes-to-string (nth 2 c))))
         (format g "}~%")))))
 
 (defun draw-graph (x)
