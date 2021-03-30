@@ -79,7 +79,10 @@
               ((null (car a))
                (list (cons "shape" (if (equalp '(c a) (subseq (nth 1 a) 0 2))
                                        "octagon"
-                                       "diamond"))
+                                       "circle"))
+                     (cons "fontsize" (if (equalp '(c a) (subseq (nth 1 a) 0 2))
+                                      "16"
+                                      "6"))
                      (cons "label" (format nil "~S" (nth 0 a)))))
               (T
                (list (cons "shape" "box")
