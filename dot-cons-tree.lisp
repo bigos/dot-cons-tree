@@ -69,25 +69,27 @@
                      (format nil "~a=~s" (car ap) (cdr ap)))
              ", "))))
 
+(defun prepare-attributes (a)
+  (list (symbols-to-string (nth 1 a))
+        (cond ((instance-slots (car a))
+               (list (cons "shape" "box")
+                     (cons "color" "yellow")
+                     (cons "style" "filled")
+                     (cons "label" (format nil "~S"  (type-of (nth 0 a))))))
+              ((null (car a))
+               (list
+                (cons "shape" (if (equalp '(c a) (subseq (nth 1 a) 0 2))
+                                  "octagon"
+                                  "diamond"))
+                (cons "label" (format nil "~S" (nth 0 a)))))
+              (T
+               (list (cons "shape" "box")
+                     (cons "label" (format nil "~S" (nth 0 a))))))))
+
 (defun prepare-graph (x)
   (let ((results (analyse x)))
     (let ((atom-shapes (mapcar
-                        (lambda (a)
-                          (list (symbols-to-string (nth 1 a))
-                                (cond ((instance-slots (car a))
-                                       (list (cons "shape" "box")
-                                             (cons "color" "yellow")
-                                             (cons "style" "filled")
-                                             (cons "label" (format nil "~S"  (type-of (nth 0 a))))))
-                                      ((null (car a))
-                                       (list
-                                        (cons "shape" (if (equalp '(c a) (subseq (nth 1 a) 0 2))
-                                                          "octagon"
-                                                          "diamond"))
-                                        (cons "label" (format nil "~S" (nth 0 a)))))
-                                      (T
-                                       (list (cons "shape" "box")
-                                             (cons "label" (format nil "~S" (nth 0 a))))))))
+                        #'prepare-attributes
                         (remove-if-not (lambda (x)
                                          (atom (car x)))
                                        results)))
