@@ -73,7 +73,7 @@
 ;; * Node, Edge and Graph Attributes
 ;; * Node Shapes
 ;; http://www.graphviz.org/documentation/
-(defun prepare-attributes (a)
+(defun prepare-node-attributes (a)
   (list (symbols-to-string (nth 1 a))
         (cond ((instance-slots (car a))
                (list (cons "shape" "note")
@@ -109,7 +109,7 @@
 
 (defun prepare-graph (x)
   (let ((results (analyse x)))
-    (let ((nodes (mapcar #'prepare-attributes
+    (let ((nodes (mapcar #'prepare-node-attributes
                          (remove-if-not (lambda (x)
                                           (atom (car x)))
                                         results)))
