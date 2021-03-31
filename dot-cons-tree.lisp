@@ -69,10 +69,14 @@
                      (format nil "~a=~s" (car ap) (cdr ap)))
              ", "))))
 
+;; here we can find the documentation for the options
+;; * Node, Edge and Graph Attributes
+;; * Node Shapes
+;; http://www.graphviz.org/documentation/
 (defun prepare-attributes (a)
   (list (symbols-to-string (nth 1 a))
         (cond ((instance-slots (car a))
-               (list (cons "shape" "house")
+               (list (cons "shape" "tab")
                      (cons "color" "yellow")
                      (cons "style" "filled")
                      (cons "label" (format nil "~S"  (type-of (nth 0 a))))))
