@@ -45,7 +45,7 @@
     #+begin_src lisp
       (push #p"~/dot-cons-tree/" asdf:*central-registry*)
       (ql:quickload :dot-cons-tree)
-      (dot-cons-tree:draw-graph '(1 (2.1 . 2.2) 3))
+      (dot-cons-tree:draw-graph (list 1 nil '(2.1 . 2.2) dot-cons-tree::*person* 3))
     #+end_src
 
     If there was no error and your SBCL lisp returned
