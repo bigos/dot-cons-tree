@@ -122,6 +122,11 @@
                   (nth 0 a)
                   (attributes-to-string (nth 1 a))))
         (format g "~%")
+        (format g "~A ~A~%"
+                "node"
+                (attributes-to-string (list (cons "color" "grey")
+                                            (cons "fontcolor" "grey"))))
+        (format g "~%")
         (loop for c in connections do
           (format g "~A ~A~%"
                   (nth 1 c)
