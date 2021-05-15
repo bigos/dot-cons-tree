@@ -109,19 +109,37 @@
 
 (defun prepare-graph (x)
   (let ((results (analyse x)))
-    (let ((nodes (mapcar #'prepare-node-attributes
-                         (remove-if-not (lambda (x)
-                                          (atom (car x)))
-                                        results)))
+    (let ((leaf-nodes (mapcar #'prepare-node-attributes
+                              (remove-if-not (lambda (x)
+                                               (atom (car x)))
+                                             results)))
+          (branch-nodes (mapcar #'prepare-node-attributes
+                                (remove-if (lambda (x)
+                                             (atom (car x)))
+                                           results)))
           (connections (mapcar #'prepare-connection-attributes
                                (cdr results))))
       (with-output-to-string (g)
         (format g "digraph {~%")
-        (loop for a in nodes do
+        (loop for a in leaf-nodes do
           (format g "~S ~A~%"
                   (nth 0 a)
                   (attributes-to-string (nth 1 a))))
-        (format g "~%")
+        (format g "~%~%~%")
+        (loop for a in branch-nodes do
+          (format g "~S ~A~%"
+                  (nth 0 a)
+                  (attributes-to-string (list (cons "label" (format nil "~A"
+                                                                    (let ((nn 5) ;needs better refactoring
+                                                                          (nam (nth 0 a)))
+                                                                      (if (> (length nam)
+                                                                             (* 2 nn))
+                                                                          (format nil "~A...~A"
+                                                                                  (subseq nam 0 nn)
+                                                                                  (subseq nam (- (length nam)
+                                                                                                 nn)))
+                                                                          (nth 0 a)))))))))
+        (format g "~%~%~%")
         (format g "~A ~A~%"
                 "node"
                 (attributes-to-string (list (cons "color" "grey")
