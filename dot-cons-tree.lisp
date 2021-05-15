@@ -107,6 +107,15 @@
                        ((equalp colsym 'd) "")
                        (T (format nil "~A" colsym))))))))
 
+(defun shorten-label (label nn)
+  (if (> (length label)
+         (* 2 nn))
+      (format nil "~A...~A"
+              (subseq label 0 nn)
+              (subseq label (- (length label)
+                             nn)))
+      label))
+
 (defun prepare-graph (x)
   (let ((results (analyse x)))
     (let ((leaf-nodes (mapcar #'prepare-node-attributes
@@ -129,16 +138,10 @@
         (loop for a in branch-nodes do
           (format g "~S ~A~%"
                   (nth 0 a)
-                  (attributes-to-string (list (cons "label" (format nil "~A"
-                                                                    (let ((nn 5) ;needs better refactoring
-                                                                          (nam (nth 0 a)))
-                                                                      (if (> (length nam)
-                                                                             (* 2 nn))
-                                                                          (format nil "~A...~A"
-                                                                                  (subseq nam 0 nn)
-                                                                                  (subseq nam (- (length nam)
-                                                                                                 nn)))
-                                                                          (nth 0 a)))))))))
+                  (attributes-to-string (list
+                                         (cons "label"
+                                               (format nil "~A"
+                                                       (shorten-label (nth 0 a) 5)))))))
         (format g "~%~%~%")
         (format g "~A ~A~%"
                 "node"
