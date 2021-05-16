@@ -6,6 +6,7 @@
 ;; (ql:quickload :dot-cons-tree)
 ;; (in-package #:dot-cons-tree)
 ;; (dot-cons-tree:draw-graph '(1 (2.1 . 2.2) 3))
+;; (dot-cons-tree:draw-graph  (circular (list 1 2 3)))
 
 (in-package #:dot-cons-tree)
 
@@ -16,6 +17,10 @@
                (if (null (cdr x))
                    acc
                    (flatten (cdr x) acc)))))
+
+(defun circular (items)
+  (setf (cdr (last items)) items)
+  items)
 
 (defstruct person (name) (surname) (some-titles))
 (defparameter *person* (make-person :name (cons "Mister" "Paul")
@@ -44,8 +49,16 @@
                            sx)))
                  (cond ((consp a)
                         (push (coll a sx osx) results)
-                        (dive (car a) (cons 'a sx) sx)
-                        (dive (cdr a) (cons 'd sx) sx))
+                        (if (gethash (car a) *seen*)
+                            (push (coll (car a) sx osx) results)
+                            (progn
+                              (setf (gethash (car a) *seen*) t)
+                              (dive (car a) (cons 'a sx) sx)))
+                        (if (gethash (cdr a) *seen*)
+                            (push (coll (cdr a) sx osx) results)
+                            (progn
+                              (setf (gethash (cdr a) *seen*) t)
+                              (dive (cdr a) (cons 'd sx) sx))))
                        (t
                         (push (coll a sx osx) results)))))))
 
@@ -157,6 +170,8 @@
 (defun draw-graph (x)
   (let ((filename "dot-graph")
         (extension "svg"))
+    (defparameter *seen* (make-hash-table :test #'equal))
+
     (let ((gv-file (format nil "/tmp/~A.gv" filename))
           (the-file(format nil "/tmp/~A.~A" filename extension)))
       (let ((options (list
